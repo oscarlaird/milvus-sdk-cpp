@@ -278,7 +278,8 @@ class MilvusConnection {
 
         if (!authorization_value_.empty()) {
             context.AddMetadata("authorization", authorization_value_);
-            context.set_authority(authorization_value_);
+            // todo
+            // context.set_authority(authorization_value_);
         }
 
         ::grpc::Status grpc_status = (stub_.get()->*func)(&context, request, &response);
