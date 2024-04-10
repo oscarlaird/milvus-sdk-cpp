@@ -1,68 +1,41 @@
-# Licensed to the LF AI & Data foundation under one
-# or more contributor license agreements. See the NOTICE file
-# distributed with this work for additional information
-# regarding copyright ownership. The ASF licenses this file
-# to you under the Apache License, Version 2.0 (the
-# "License"); you may not use this file except in compliance
-# with the License. You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# Define compiler
+CXX=g++
 
-PWD 	:= $(shell pwd)
+# Compiler flags
+CXXFLAGS=-std=c++14 -pthread -I/usr/include -I./generated -I./src/include -I./json/single_include -fPIC
 
-all-debug: build-sdk-debug
-all-release: build-sdk-release
-all: all-debug
+# Linker flags
+LDFLAGS=-lgrpc++ -lgrpc -lgrpc++_reflection -lprotobuf -ldl
 
-# Code lint
-lint:
-	@(env bash ${PWD}/scripts/build.sh -l)
+# Source files
+SOURCES= $(wildcard generated/*.cpp) $(wildcard src/impl/*.cpp)
+SOURCES += $(wildcard src/impl/types/*.cpp)
 
-# Build sdk
-build-sdk-debug:
-	@echo "Building Milvus SDK debug version ..."
-	@(env bash $(PWD)/scripts/build.sh -t Debug)
+# Object files
+OBJECTS=$(SOURCES:.cpp=.o)
 
-build-sdk-release:
-	@echo "Building Milvus SDK release version ..."
-	@(env bash $(PWD)/scripts/build.sh -t Release)
+# Output binary
+LIBRARY=libmilvus.so
 
-install: install-release
+all: $(SOURCES) $(LIBRARY)
 
-install-release:
-	@echo "Installing Milvus SDK release version ..."
-	@(env bash $(PWD)/scripts/build.sh -i -t Release)
+$(LIBRARY): $(OBJECTS)
+	$(CXX) $(CXXFLAGS) $(OBJECTS) -shared -o $(LIBRARY) $(LDFLAGS)
 
-install-debug:
-	@echo "Installing Milvus SDK debug version ..."
-	@(env bash $(PWD)/scripts/build.sh -i -t Debug)
-
-test:
-	@echo "Testing with Milvus SDK"
-	@(env bash $(PWD)/scripts/build.sh -u)
-
-st:
-	@echo "System Testing with Milvus SDK"
-	@(env bash $(PWD)/scripts/build.sh -s)
-
-coverage:
-	@echo "Run code coverage ..."
-	@(env bash $(PWD)/scripts/build.sh -u -s -c)
-	@(env bash $(PWD)/scripts/coverage.sh)
-
-documentation:
-	@echo "Generating Milvus SDK documentation ..."
-	rm -rf ./doc/html ./doc/latex
-	doxygen ./doc/Doxyfile
+.cpp.o:
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:
-	@echo "Cleaning"
-	rm -fr cmake_build/
+	rm -f $(OBJECTS) $(LIBRARY)
 
-.PHONY: test clean package
+install:
+	# copy libmilvus.so to /usr/lib
+	cp $(LIBRARY) /usr/lib
+	# copy ./src/include to /usr/include
+	cp -r ./src/include/milvus /usr/include
+
+uninstall:
+	# remove libmilvus.so from /usr/lib
+	rm -f /usr/lib/$(LIBRARY)
+	# remove ./src/include from /usr/include
+	rm -rf /usr/include/milvus
