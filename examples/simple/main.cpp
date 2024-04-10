@@ -153,9 +153,9 @@ main(int argc, char* argv[]) {
     }
 
     // drop partition
-    status = client->DropPartition(collection_name, partition_name);
-    CheckStatus("Failed to drop partition:", status);
-    std::cout << "Drop partition " << partition_name << std::endl;
+    // status = client->DropPartition(collection_name, partition_name);
+    // CheckStatus("Failed to drop partition:", status);
+    // std::cout << "Drop partition " << partition_name << std::endl;
 
     // verify the row count should be 0
     milvus::CollectionStat col_stat;
