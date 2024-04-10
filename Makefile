@@ -3,6 +3,8 @@ CXX=g++
 
 # Compiler flags
 CXXFLAGS=-std=c++14 -pthread -I/usr/include -I./generated -I./src/include -I./json/single_include -fPIC
+# debugging
+CXXFLAGS+=-g -O0
 
 # Linker flags
 LDFLAGS=-lgrpc++ -lgrpc -lgrpc++_reflection -lprotobuf -ldl
@@ -25,10 +27,10 @@ $(LIBRARY): $(OBJECTS)
 .cpp.o:
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-clean:
+clean: uninstall
 	rm -f $(OBJECTS) $(LIBRARY)
 
-install:
+install: $(LIBRARY)
 	# copy libmilvus.so to /usr/lib
 	cp $(LIBRARY) /usr/lib
 	# copy ./src/include to /usr/include
