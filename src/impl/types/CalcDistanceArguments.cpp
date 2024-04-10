@@ -21,6 +21,8 @@
 
 #include "../TypeUtils.h"
 
+#include <functional>
+
 namespace milvus {
 
 namespace {
