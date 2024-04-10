@@ -9,4 +9,10 @@ logs/
 build/
 code_coverage/
 
+# object files
+**/*.o
+
+# libraries
+**/*.a
+**/*.so
 
