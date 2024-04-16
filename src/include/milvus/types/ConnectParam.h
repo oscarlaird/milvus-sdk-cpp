@@ -62,6 +62,12 @@ class ConnectParam {
     Authorizations() const;
 
     /**
+     * @brief SetApiKey set api key for connecting to the milvus.
+     */
+    void
+    SetApiKey(std::string api_key);
+
+    /**
      * @brief SetAuthorizations set username and password for connecting to the milvus.
      */
     void

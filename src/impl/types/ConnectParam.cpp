@@ -51,6 +51,11 @@ ConnectParam::Authorizations() const {
 }
 
 void
+ConnectParam::SetApiKey(std::string api_key) {
+    authorizations_ = milvus::Base64Encode(std::move(api_key));
+}
+
+void
 ConnectParam::SetAuthorizations(std::string username, std::string password) {
     authorizations_ = milvus::Base64Encode(std::move(username) + ':' + std::move(password));
 }
