@@ -429,6 +429,20 @@ CreateProtoFieldData(const FloatVecFieldData& field) {
 }
 
 proto::schema::ScalarField*
+CreateProtoFieldData(const ArrayFieldData& field) {
+    auto ret = new proto::schema::ScalarField{};
+    auto& data = field.Data();
+    auto& scalars_data = *(ret->mutable_array_data());
+    for (const auto& item : data) {
+        auto row = scalars_data.add_data();
+        // if int64
+        auto& row_data = *(row->mutable_long_data()->mutable_data());
+        row_data.Add(item.begin(), item.end());
+    }
+    return ret;
+}
+
+proto::schema::ScalarField*
 CreateProtoFieldData(const BoolFieldData& field) {
     auto ret = new proto::schema::ScalarField{};
     auto& data = field.Data();
@@ -515,6 +529,10 @@ CreateProtoFieldData(const Field& field) {
             break;
         case DataType::FLOAT_VECTOR:
             field_data.set_allocated_vectors(CreateProtoFieldData(dynamic_cast<const FloatVecFieldData&>(field)));
+            break;
+        case DataType::ARRAY:
+            // from pymilvus I see that array data is stored in scalars
+            field_data.set_allocated_scalars(CreateProtoFieldData(dynamic_cast<const ArrayFieldData&>(field)));
             break;
         case DataType::BOOL:
             field_data.set_allocated_scalars(CreateProtoFieldData(dynamic_cast<const BoolFieldData&>(field)));

@@ -93,6 +93,9 @@ proto::schema::VectorField*
 CreateProtoFieldData(const FloatVecFieldData& field);
 
 proto::schema::ScalarField*
+CreateProtoFieldData(const ArrayFieldData& field);
+
+proto::schema::ScalarField*
 CreateProtoFieldData(const BoolFieldData& field);
 
 proto::schema::ScalarField*

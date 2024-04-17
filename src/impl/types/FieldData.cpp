@@ -199,5 +199,6 @@ template class FieldData<double, DataType::DOUBLE>;
 template class FieldData<std::string, DataType::VARCHAR>;
 template class FieldData<std::string, DataType::BINARY_VECTOR>;
 template class FieldData<std::vector<float>, DataType::FLOAT_VECTOR>;
+template class FieldData<std::vector<int64_t>, DataType::ARRAY>;
 
 }  // namespace milvus
