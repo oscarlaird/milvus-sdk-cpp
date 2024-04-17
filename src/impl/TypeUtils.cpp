@@ -296,6 +296,8 @@ DataTypeCast(DataType type) {
             return proto::schema::DataType::BinaryVector;
         case DataType::FLOAT_VECTOR:
             return proto::schema::DataType::FloatVector;
+        case DataType::ARRAY:
+            return proto::schema::DataType::Array;
         default:
             return proto::schema::DataType::None;
     }
@@ -324,6 +326,8 @@ DataTypeCast(proto::schema::DataType type) {
             return DataType::BINARY_VECTOR;
         case proto::schema::DataType::FloatVector:
             return DataType::FLOAT_VECTOR;
+        case proto::schema::DataType::Array:
+            return DataType::ARRAY;
         default:
             return DataType::UNKNOWN;
     }
@@ -416,7 +420,7 @@ CreateProtoFieldData(const FloatVecFieldData& field) {
     auto& data = field.Data();
     auto dim = data.front().size();
     auto& vectors_data = *(ret->mutable_float_vector()->mutable_data());
-    vectors_data.Reserve(static_cast<int>(data.size() * dim));
+    vectors_data.Reserve(static_cast<int>(data.size() * dim)); // reserve n*dim 
     for (const auto& item : data) {
         vectors_data.Add(item.begin(), item.end());
     }
@@ -696,6 +700,7 @@ ConvertFieldSchema(const proto::schema::FieldSchema& proto_schema, FieldSchema& 
     field_schema.SetPrimaryKey(proto_schema.is_primary_key());
     field_schema.SetAutoID(proto_schema.autoid());
     field_schema.SetDataType(DataTypeCast(proto_schema.data_type()));
+    field_schema.SetElementType(DataTypeCast(proto_schema.element_type()));
 
     std::map<std::string, std::string> params;
     for (int k = 0; k < proto_schema.type_params_size(); ++k) {
@@ -725,6 +730,7 @@ ConvertFieldSchema(const FieldSchema& schema, proto::schema::FieldSchema& proto_
     proto_schema.set_is_primary_key(schema.IsPrimaryKey());
     proto_schema.set_autoid(schema.AutoID());
     proto_schema.set_data_type(DataTypeCast(schema.FieldDataType()));
+    proto_schema.set_element_type(DataTypeCast(schema.ElementType()));
 
     for (auto& kv : schema.TypeParams()) {
         auto pair = proto_schema.add_type_params();

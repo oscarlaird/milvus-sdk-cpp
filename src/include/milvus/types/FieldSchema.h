@@ -36,7 +36,7 @@ class FieldSchema {
      * @brief Constructor
      */
     FieldSchema(std::string name, DataType data_type, std::string description = "", bool is_primary_key = false,
-                bool auto_id = false);
+                bool auto_id = false, DataType elem_type = DataType::FLOAT);
 
     /**
      * @brief Name of this field, cannot be empty.
@@ -73,6 +73,18 @@ class FieldSchema {
      */
     void
     SetDataType(DataType dt);
+
+    /**
+     * @brief Element data type
+     */
+    DataType
+    ElementType() const;
+
+    /**
+     * @brief Set element_type
+    */
+    void
+    SetElementType(DataType dt);
 
     /**
      * @brief The field is primary key or not.
@@ -167,6 +179,7 @@ class FieldSchema {
     std::string name_;
     std::string description_;
     DataType data_type_{DataType::FLOAT};
+    DataType element_type_{DataType::FLOAT};
     bool is_primary_key_ = false;
     bool auto_id_ = false;
     std::map<std::string, std::string> type_params_;

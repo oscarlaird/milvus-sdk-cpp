@@ -36,6 +36,7 @@ enum class DataType {
     // STRING not available
     // STRING = 20,
     VARCHAR = 21,
+    ARRAY = 22,
 
     BINARY_VECTOR = 100,
     FLOAT_VECTOR = 101,

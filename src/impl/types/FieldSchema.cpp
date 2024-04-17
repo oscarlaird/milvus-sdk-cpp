@@ -23,12 +23,13 @@ namespace milvus {
 FieldSchema::FieldSchema() = default;
 
 FieldSchema::FieldSchema(std::string name, DataType data_type, std::string description, bool is_primary_key,
-                         bool auto_id)
+                         bool auto_id, DataType elem_type)
     : name_(std::move(name)),
       description_(std::move(description)),
       data_type_(data_type),
       is_primary_key_(is_primary_key),
-      auto_id_(auto_id) {
+      auto_id_(auto_id),
+      element_type_(elem_type) {
 }
 
 const std::string&
@@ -59,6 +60,16 @@ FieldSchema::FieldDataType() const {
 void
 FieldSchema::SetDataType(DataType dt) {
     data_type_ = dt;
+}
+
+DataType
+FieldSchema::ElementType() const {
+    return element_type_;
+}
+
+void
+FieldSchema::SetElementType(DataType dt) {
+    element_type_ = dt;
 }
 
 bool

@@ -64,6 +64,7 @@ using FieldDataPtr = std::shared_ptr<Field>;
  *  VarCharFieldData for string scalar field (not supported in 2.0, reserved) \n
  *  BinaryVecFieldData for float vector scalar field \n
  *  FloatVecFieldData for binary vector scalar field \n
+ *  ArrayFieldData for array scalar field \n
  */
 template <typename T, DataType Dt>
 class FieldData : public Field {
@@ -232,6 +233,7 @@ using FloatFieldData = FieldData<float, DataType::FLOAT>;
 using DoubleFieldData = FieldData<double, DataType::DOUBLE>;
 using VarCharFieldData = FieldData<std::string, DataType::VARCHAR>;
 using FloatVecFieldData = FieldData<std::vector<float>, DataType::FLOAT_VECTOR>;
+using ArrayFieldData = FieldData<std::vector<int64_t>, DataType::ARRAY>;
 
 using BoolFieldDataPtr = std::shared_ptr<BoolFieldData>;
 using Int8FieldDataPtr = std::shared_ptr<Int8FieldData>;
@@ -243,6 +245,7 @@ using DoubleFieldDataPtr = std::shared_ptr<DoubleFieldData>;
 using VarCharFieldDataPtr = std::shared_ptr<VarCharFieldData>;
 using BinaryVecFieldDataPtr = std::shared_ptr<BinaryVecFieldData>;
 using FloatVecFieldDataPtr = std::shared_ptr<FloatVecFieldData>;
+using ArrayFieldDataPtr = std::shared_ptr<ArrayFieldData>;
 
 extern template class FieldData<bool, DataType::BOOL>;
 extern template class FieldData<int8_t, DataType::INT8>;

@@ -84,6 +84,7 @@ MilvusClientImpl::CreateCollection(const CollectionSchema& schema) {
             rpc_field->set_name(field.Name());
             rpc_field->set_description(field.Description());
             rpc_field->set_data_type(static_cast<proto::schema::DataType>(field.FieldDataType()));
+            rpc_field->set_element_type(static_cast<proto::schema::DataType>(field.ElementType()));
             rpc_field->set_is_primary_key(field.IsPrimaryKey());
             rpc_field->set_autoid(field.AutoID());
 
